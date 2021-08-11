@@ -1,10 +1,10 @@
-# Obsdian Web
+# Obsidian Web
 
 ![](/image/index.jpg)
 
-现在主要用obsdian写笔记本，有一个伪需求就是需要把笔记发布成blog，方便共享
+现在主要用Obsidian写笔记本，有一个伪需求就是需要把笔记发布成blog，方便共享
 
-osbdian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+mardown editor就可以解决了
+Obsidian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+mardown editor就可以解决了
 
 ## 配置
 编辑 **/Server/index.js**
