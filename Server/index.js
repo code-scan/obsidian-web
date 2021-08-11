@@ -17,7 +17,7 @@ function GetFileList(current) {
         name: file,
         label: file,
         type: "dir",
-        fullpath: `${current}/${file}`,
+        fullpath: `${current}/${file}`.replace(obsdianPath, ""),
         children: GetFileList(`${current}/${file}`),
       });
     } else {
@@ -25,7 +25,7 @@ function GetFileList(current) {
         name: file,
         label: file,
         type: "file",
-        fullpath: `${current}/${file}`,
+        fullpath: `${current}/${file}`.replace(obsdianPath, ""),
         children: [],
       });
     }
@@ -63,14 +63,9 @@ app.get("/read", (req, res) => {
     text: "",
   };
   var path = req.query.path;
+  path = obsdianPath + "/" + path.replace(/\.\./g, "");
   console.log("[*] Read " + path);
-  path = path.replace("..", "");
-  if (path.indexOf(obsdianPath) != 0) {
-    result.code = 401;
-    result.text = "error," + path.indexOf(obsdianPath);
-    console.log("[!] Error " + path);
-    console.log("[!] Error " + obsdianPath);
-  } else {
+  if (fs.existsSync(path)) {
     result.text = replaceStatic(fs.readFileSync(path).toString());
   }
   res.send(result);

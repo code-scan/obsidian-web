@@ -1,30 +1,51 @@
 <template>
   <div id="main">
-    <el-row>
-      <el-col :span="24"
-        ><div class="grid-content bg-purple-dark"></div
-      ></el-col>
-    </el-row>
-    <el-row>
-      <el-col class="left" :span="6"
-        ><div class="grid-content bg-purple">
-          <el-tree
-            :data="filelist"
-            @node-click="handleNodeClick"
-          ></el-tree></div
-      ></el-col>
-      <el-col class="right" :span="18"
-        ><div class="grid-content bg-purple-light">
-          <mavon-editor
-            :toolbars="markdownOption"
-            :preview="true"
-            :subfield="false"
-            :editable="false"
-            :defaultOpen="preview"
-            v-model="text"
-          ></mavon-editor></div
-      ></el-col>
-    </el-row>
+    <div class="header">
+      <el-row>
+        <el-col :span="24"
+          ><div class="grid-content bg-purple-dark">
+            <h1>
+              <span class="title">{{ title }}</span>
+            </h1>
+          </div></el-col
+        >
+      </el-row>
+    </div>
+    <div class="body">
+      <el-row>
+        <el-col class="left" :span="6"
+          ><div class="bg-purple">
+            <el-input
+              placeholder="请输入内容"
+              prefix-icon="el-icon-search"
+              v-model="keyword"
+            >
+            </el-input>
+            <el-tree :data="filelist" @node-click="handleNodeClick">
+              <span slot-scope="{ node, data }">
+                <i v-if="data.type == 'dir'" class="el-icon-notebook-2" />
+                <i v-else class="el-icon-tickets" />
+                <span style="margin-left:5px;" :title="data.name">{{
+                  data.name
+                }}</span>
+              </span>
+            </el-tree>
+          </div></el-col
+        >
+        <el-col class="right" :span="18"
+          ><div class=" bg-purple-light">
+            <mavon-editor
+              :toolbars="markdownOption"
+              :preview="true"
+              :subfield="false"
+              :editable="false"
+              :defaultOpen="preview"
+              :toolbarsFlag="false"
+              v-model="text"
+            ></mavon-editor></div
+        ></el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -36,24 +57,57 @@ export default {
 
   data() {
     return {
+      // server: "http://127.0.0.1:3000",
+      server: "",
       filelist: [],
+      fulllist: [],
       text: "",
       preview: "preview",
-      markdownOption: {}
+      markdownOption: {},
+      title: "Obsidian Web",
+      keyword: ""
     };
   },
   mounted() {
-    axios.get("/list").then(resp => {
+    axios.get(this.server + "/list").then(resp => {
       console.log("send requests");
       this.filelist = resp.data;
+      this.fulllist = resp.data;
     });
   },
+  watch: {
+    title(newValue, oldValue) {
+      if (newValue != oldValue) {
+        document.title = newValue;
+      }
+    },
+    keyword(newValue) {
+      if (newValue == "") {
+        this.filelist = this.fulllist;
+      } else {
+        this.filelist = [];
+        this.searchKeyword(this.fulllist);
+      }
+    }
+  },
   methods: {
+    searchKeyword(fulllist) {
+      fulllist.forEach(element => {
+        if (element.label.indexOf(this.keyword) != -1)
+          this.filelist.push(element);
+        if (element.type == "dir") {
+          this.searchKeyword(element.children);
+        }
+      });
+    },
     handleNodeClick(e) {
       if (e.type == "file") {
-        axios.get("/read?path=" + encodeURIComponent(e.fullpath)).then(resp => {
-          this.text = resp.data.text;
-        });
+        this.title = e.label;
+        axios
+          .get(this.server + "/read?path=" + encodeURIComponent(e.fullpath))
+          .then(resp => {
+            this.text = resp.data.text;
+          });
       }
       console.log(e);
     }
@@ -72,7 +126,7 @@ export default {
   border-radius: 4px;
 }
 .bg-purple-dark {
-  background: #99a9bf;
+  background: #6584b1;
 }
 .bg-purple {
   background: #d3dce6;
@@ -81,21 +135,33 @@ export default {
   background: #e5e9f2;
 }
 .grid-content {
-  border-radius: 4px;
-  min-height: 36px;
+  border-radius: 3px;
+  min-height: 50px;
 }
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
 }
 .left {
-  max-height: 900px;
-  height: 900px;
-  overflow: scroll;
+  max-height: 730px;
+  height: 730px;
+  overflow-y: scroll;
 }
 .right {
-  max-height: 900px;
-  height: 900px;
-  overflow: scroll;
+  max-height: 730px;
+  height: 730px;
+  overflow: hidden;
+}
+.markdown-body {
+  width: 100%;
+  height: 730px;
+}
+.body {
+  padding: 10px;
+}
+.title {
+  color: #f5f5f5;
+  padding: 25px;
+  /* background-color: #e5e9f2; */
 }
 </style>
