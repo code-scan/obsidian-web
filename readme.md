@@ -4,7 +4,7 @@
 
 现在主要用Obsidian写笔记本，有一个伪需求就是需要把笔记发布成blog，方便共享
 
-Obsidian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+mardown editor就可以解决了
+Obsidian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+markdown editor就可以解决了
 
 ## 配置
 编辑 **/Server/index.js**
@@ -19,7 +19,7 @@ const obsdianPath =
 // 图片文件夹，目前只支持存储到统一目录的
 // 比如我实际的路径是
 // /Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫/图片存储
-
+// 不需要写完整路径,只需要写文件夹的名字即可
 const imagePath = "图片存储";
 ```
 
