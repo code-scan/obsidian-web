@@ -1,0 +1,30 @@
+# Obsdian Web
+
+![](/image/index.jpg)
+
+现在主要用obsdian写笔记本，有一个伪需求就是需要把笔记发布成blog，方便共享
+
+osbdian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+mardown editor就可以解决了
+
+## 配置
+编辑 **/Server/index.js**
+
+```js
+// 端口
+const port = 3000;
+...
+// 笔记路径
+const obsdianPath =
+  "/Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫";
+// 图片文件夹，目前只支持存储到统一目录的
+// 比如我实际的路径是
+// /Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫/图片存储
+
+const imagePath = "图片存储";
+```
+
+## 运行
+```bash
+cd Server
+npm run serve
+```
