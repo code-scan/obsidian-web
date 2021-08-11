@@ -2,7 +2,7 @@
 
 ![](/image/index.jpg)
 
-现在主要用Obsidian写笔记本，有一个伪需求就是需要把笔记发布成blog，方便共享
+现在主要用Obsidian写笔记，有一个伪需求就是需要把笔记发布成blog，方便共享
 
 Obsidian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+markdown editor就可以解决了
 
