@@ -5,13 +5,15 @@ const port = 3000;
 const host = "/files/";
 const webpath = "../frontend/dist";
 const obsdianPath =
-  "/Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫";
-const imagePath = "图片存储";
+  "/Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫/开源书籍/安全之路";
+const imagePath =
+  "/Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫/图片存储";
+const imageFolder = imagePath.split("/")[imagePath.split("/").length - 1];
 function GetFileList(current) {
   var result = [];
   var ret = fs.readdirSync(current);
   ret.forEach((file) => {
-    if (file == imagePath || file[0] == ".") return;
+    if (file == imageFolder || file == "index.md" || file[0] == ".") return;
     if (fs.statSync(`${current}/${file}`).isDirectory()) {
       result.push({
         name: file,
@@ -55,7 +57,11 @@ app.all("*", function (req, res, next) {
 //   res.send("hello world");
 // });
 app.get("/list", (req, res) => {
-  res.send(GetFileList(obsdianPath));
+  const result = {
+    title: obsdianPath.split("/")[obsdianPath.split("/").length - 1],
+    nodes: GetFileList(obsdianPath),
+  };
+  res.send(result);
 });
 app.get("/read", (req, res) => {
   var result = {
@@ -70,7 +76,7 @@ app.get("/read", (req, res) => {
   }
   res.send(result);
 });
-app.use("/files", express.static(`${obsdianPath}/${imagePath}`));
+app.use("/files", express.static(`${imagePath}`));
 
 app.use(express.static(webpath));
 app.listen(port, () => {

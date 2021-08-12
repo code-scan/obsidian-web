@@ -71,8 +71,19 @@ export default {
   mounted() {
     axios.get(this.server + "/list").then(resp => {
       console.log("send requests");
-      this.filelist = resp.data;
-      this.fulllist = resp.data;
+      this.filelist = [];
+      this.filelist.push({
+        label: "首页",
+        name: "首页",
+        fullpath: "index.md",
+        type: "file"
+      });
+      this.filelist = this.filelist.concat(resp.data.nodes);
+      this.fulllist = this.filelist;
+      this.title = resp.data.title;
+    });
+    axios.get(this.server + "/read?path=index.md").then(resp => {
+      this.text = resp.data.text;
     });
   },
   watch: {
