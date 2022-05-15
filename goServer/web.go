@@ -42,7 +42,12 @@ func globFiles(path string) *[]List {
 		return &list
 	}
 	for _, file := range dir {
+		//skil . and  ..
 		if file.Name() == "." || file.Name() == ".." || strings.HasPrefix(file.Name(), ".") {
+			continue
+		}
+		//skip not markdown file
+		if file.IsDir() == false && strings.HasSuffix(file.Name(), ".md") == false {
 			continue
 		}
 		f := List{
@@ -58,7 +63,10 @@ func globFiles(path string) *[]List {
 			f.Type = "file"
 		}
 		f.FullPath = strings.ReplaceAll(f.FullPath, obsidianPath, "")
-		// f.FullPath = strings.Trim(f.FullPath, obsidianPath)
+		// skip null dir
+		if f.Type == "dir" && len(*f.Children) == 0 {
+			continue
+		}
 		list = append(list, f)
 	}
 	return &list
@@ -69,6 +77,7 @@ func main() {
 	flag.Parse()
 	r := gin.Default()
 	r.Static("/files/", obsidianPath)
+	// redirect to real static dir
 	r.GET("/static/*path", func(c *gin.Context) {
 		uri := c.Param("path")
 		c.Redirect(302, "/static_/dist/static/"+uri)

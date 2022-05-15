@@ -28,3 +28,19 @@ const imagePath = "图片存储";
 cd Server
 npm run serve
 ```
+
+
+## golang server
+
+```bash
+cd frontend
+npm run go
+cd ../goServer/
+go run web.go -p obsidian_full_path
+
+go build web.go 
+
+./web.exe -p obsidian_full_path
+```
+
+编译好的可以在[bin](/bin/)目录下载
