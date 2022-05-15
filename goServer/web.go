@@ -14,7 +14,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var obsidianPath = ""
+var (
+	obsidianPath string
+	port         string
+)
 
 //go:embed dist/index.html
 var IndexHTML string
@@ -73,7 +76,8 @@ func globFiles(path string) *[]List {
 }
 
 func main() {
-	flag.StringVar(&obsidianPath, "p", "/home/c/SyncNote/Obsidian/人生漫漫/人生漫漫", "obsidian fullpath")
+	flag.StringVar(&obsidianPath, "o", "/home/c/SyncNote/Obsidian/人生漫漫/人生漫漫", "obsidian fullpath")
+	flag.StringVar(&port, "p", "8000", "web port")
 	flag.Parse()
 	r := gin.Default()
 	r.Static("/files/", obsidianPath)
@@ -97,6 +101,6 @@ func main() {
 		c.JSON(200, web)
 	})
 
-	r.Run("0.0.0.0:8000")
+	r.Run(fmt.Sprintf("0.0.0.0:%s", port))
 
 }
