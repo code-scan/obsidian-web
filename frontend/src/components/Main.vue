@@ -193,7 +193,7 @@ export default {
   border-radius: 4px;
 }
 .bg-purple-dark {
-  background: #6584b1;
+  background: #323546;
 }
 .bg-purple {
   background: #d3dce6;
