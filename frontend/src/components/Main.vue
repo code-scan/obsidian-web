@@ -13,8 +13,9 @@
     </div>
     <div class="body">
       <el-row>
-        <el-col class="left" :span="6"
-          ><div class="bg-purple">
+        <el-col class="left" :span="4"
+          >
+          <div class="bg-purple">
             <el-input
               placeholder="请输入内容"
               prefix-icon="el-icon-search"
@@ -32,7 +33,7 @@
             </el-tree>
           </div></el-col
         >
-        <el-col class="right" :span="18"
+        <el-col class="right" :span="20"
           ><div class=" bg-purple-light">
             <mavon-editor
               :toolbars="markdownOption"
@@ -87,11 +88,7 @@ export default {
       this.fulllist = this.filelist;
       this.title = resp.data.title;
     });
-    axios.get(this.server + "/read?path="+index).then(resp => {
-      var html=resp.data.text;
-      html=this.replaceLink(html);
-      this.text = html;
-    });
+    this.readFile(index)
   },
   watch: {
     title(newValue, oldValue) {
@@ -106,9 +103,21 @@ export default {
         this.filelist = [];
         this.searchKeyword(this.fulllist);
       }
-    }
+    },
+    $route(to,from){
+      if(to.query.path){
+        this.readFile(to.query.path)
+      }
+   }
   },
   methods: {
+    readFile(path){
+      axios.get(this.server + "/read?path="+path).then(resp => {
+        var html=resp.data.text;
+        html = this.replaceLink(html);
+        this.text = html;
+      });
+    },
     searchKeyword(fulllist) {
       fulllist.forEach(element => {
         if (element.label.indexOf(this.keyword) != -1)
@@ -156,6 +165,17 @@ export default {
           const image = element.replace('](', '](/files/')
           html = html.replace(element,image)
       }
+
+      var reg_image=/!\[]\((.+?)\)/g
+      var result = html.match(reg_image)
+      for (let key in result) {
+          var element = result[key];
+          if(element.indexOf('files') > -1){
+            continue;
+          }
+          const image = element.replace('](', '](/files/')
+          html = html.replace(element,image)
+      }
       return html;
     }
   }
@@ -190,25 +210,36 @@ export default {
   background-color: #f9fafc;
 }
 .left {
+  background: white;
   max-height: 730px;
   height: 730px;
   overflow-y: scroll;
+  /* margin-top: 20px; */
 }
 .right {
   max-height: 730px;
   height: 730px;
   overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+
 }
 .markdown-body {
   width: 100%;
   height: 730px;
 }
 .body {
-  padding: 10px;
+  padding-left: 10px;
 }
 .title {
   color: #f5f5f5;
-  padding: 25px;
+  position: relative;
+  top: 6px;
+  left: 10px;
   /* background-color: #e5e9f2; */
+}
+.header{
+  padding-left: 10px;
+  padding-right: 20px;
 }
 </style>

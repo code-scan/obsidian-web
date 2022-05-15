@@ -9,7 +9,9 @@ import "element-ui/lib/theme-chalk/index.css";
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 // use
-
+mavonEditor.markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+};
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
