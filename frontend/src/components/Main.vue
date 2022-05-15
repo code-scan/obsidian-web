@@ -13,7 +13,8 @@
     </div>
     <div class="body">
       <el-row>
-        <el-col class="left" :span="6"
+        <!-- v-bind:style="{ width: detailWidth + 'px' }" -->
+        <el-col id="menu" class="left"  :span="5"
           >
           <div class="bg-purple">
             <el-input
@@ -33,7 +34,7 @@
             </el-tree>
           </div></el-col
         >
-        <el-col class="right" :span="18"
+        <el-col id="content" class="right" :span="19"
           ><div class=" bg-purple-light">
             <mavon-editor
               :toolbars="markdownOption"
@@ -66,10 +67,12 @@ export default {
       preview: "preview",
       markdownOption: {},
       title: "Obsidian Web",
-      keyword: ""
+      keyword: "",
+      detailWidth:'300',
     };
   },
   mounted() {
+
     var index='index.md'
     if(this.$route.query.path){
       index = this.$route.query.path;
@@ -89,6 +92,7 @@ export default {
       this.title = resp.data.title;
     });
     this.readFile(index)
+    // this.dragControllerDiv()
   },
   watch: {
     title(newValue, oldValue) {
@@ -128,7 +132,7 @@ export default {
       });
     },
     handleNodeClick(e) {
-      if (e.type == "file") {
+      if (e.type == "file" && e.fullpath.indexOf(".md")>-1) {
         this.title = e.label;
         this.$router.push({
           path:"/",
@@ -176,7 +180,33 @@ export default {
           html = html.replace(element,image)
       }
       return html;
+    },
+    dragControllerDiv: function() {
+      // 保留this引用
+      let data = this;
+      let resize = document.getElementById("menu");
+      resize.onmousedown = function(e) {
+        // 颜色改变提醒
+        resize.style.background = "#818181";
+        let startX = e.clientX;
+        resize.left = resize.offsetLeft;
+        document.onmousemove = function(e) {
+          // 计算并应用位移量
+          let endX = e.clientX;
+          let moveLen = startX-endX ;
+          startX = endX;
+          data.detailWidth -= moveLen;
+        };
+        document.onmouseup = function() {
+          // 颜色恢复
+          resize.style.background = "";
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+        return false;
+      };
     }
+
   }
 };
 </script>
