@@ -222,8 +222,13 @@ export default {
   overflow: hidden;
   padding-left: 20px;
   padding-right: 20px;
-
+  scrollbar-width: none;
+  
 }
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+
 .markdown-body {
   width: 100%;
   height: 730px;
