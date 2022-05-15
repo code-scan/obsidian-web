@@ -13,7 +13,7 @@
     </div>
     <div class="body">
       <el-row>
-        <el-col class="left" :span="4"
+        <el-col class="left" :span="6"
           >
           <div class="bg-purple">
             <el-input
@@ -33,7 +33,7 @@
             </el-tree>
           </div></el-col
         >
-        <el-col class="right" :span="20"
+        <el-col class="right" :span="18"
           ><div class=" bg-purple-light">
             <mavon-editor
               :toolbars="markdownOption"
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     readFile(path){
-      axios.get(this.server + "/read?path="+path).then(resp => {
+      axios.get(this.server + "/read?path="+encodeURIComponent(path)).then(resp => {
         var html=resp.data.text;
         html = this.replaceLink(html);
         this.text = html;
@@ -130,13 +130,12 @@ export default {
     handleNodeClick(e) {
       if (e.type == "file") {
         this.title = e.label;
-        axios
-          .get(this.server + "/read?path=" + encodeURIComponent(e.fullpath))
-          .then(resp => {
-            var html=resp.data.text;
-            html=this.replaceLink(html);
-            this.text = html;
-          });
+        this.$router.push({
+          path:"/",
+          query:{
+            path:e.fullpath
+          },
+        })
       }
       console.log(e);
     },
