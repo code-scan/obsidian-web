@@ -69,21 +69,28 @@ export default {
     };
   },
   mounted() {
+    var index='index.md'
+    if(this.$route.query.path){
+      index = this.$route.query.path;
+    }
+    console.log(this.$route.query.path);
     axios.get(this.server + "/list").then(resp => {
       console.log("send requests");
       this.filelist = [];
       this.filelist.push({
         label: "首页",
         name: "首页",
-        fullpath: "index.md",
+        fullpath: index,
         type: "file"
       });
       this.filelist = this.filelist.concat(resp.data.nodes);
       this.fulllist = this.filelist;
       this.title = resp.data.title;
     });
-    axios.get(this.server + "/read?path=index.md").then(resp => {
-      this.text = resp.data.text;
+    axios.get(this.server + "/read?path="+index).then(resp => {
+      var html=resp.data.text;
+      html=this.replaceLink(html);
+      this.text = html;
     });
   },
   watch: {
@@ -117,10 +124,39 @@ export default {
         axios
           .get(this.server + "/read?path=" + encodeURIComponent(e.fullpath))
           .then(resp => {
-            this.text = resp.data.text;
+            var html=resp.data.text;
+            html=this.replaceLink(html);
+            this.text = html;
           });
       }
       console.log(e);
+    },
+    replaceLink(html){
+      var reg_link = /\[\[(.+?)\]\]/g;
+      var result = html.match(reg_link)
+      console.log("result:",result)
+      for (let key in result) {
+          var element = result[key];
+          const title = element.replace(/\[\[/g, '').replace(/\]\]/g, '')
+          const link = title.replace(/\s+/g,"+")
+          const href = `[${title}](/#/?path=${link}.md)`
+          console.log("key:",element)
+          console.log("link:",link)
+          console.log("href:",href)
+          html = html.replace(element, href)
+      }
+
+      var reg_image=/!\[(.+?)\]\((.+?)\)/g
+      var result = html.match(reg_image)
+      for (let key in result) {
+          var element = result[key];
+          if(element.indexOf('files') > -1){
+            continue;
+          }
+          const image = element.replace('](', '](/files/')
+          html = html.replace(element,image)
+      }
+      return html;
     }
   }
 };

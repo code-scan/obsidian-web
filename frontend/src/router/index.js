@@ -6,16 +6,15 @@ import Main from "@/components/Main";
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: "/hello",
-      name: "HelloWorld",
-      component: HelloWorld
-    },
-    {
-      path: "/",
-      name: "Main",
-      component: Main
-    }
-  ]
+    routes: [{
+            path: "/hello",
+            name: "HelloWorld",
+            component: HelloWorld
+        },
+        {
+            path: "/",
+            name: "Main",
+            component: Main
+        }
+    ]
 });

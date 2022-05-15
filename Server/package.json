@@ -8,5 +8,8 @@
     "serve": "cd ../frontend/;npm run build;cd ../Server/;node index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
