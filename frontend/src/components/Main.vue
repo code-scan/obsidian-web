@@ -116,8 +116,9 @@ export default {
   },
   methods: {
     readFile(path){
-      axios.get(this.server + "/read?path="+encodeURIComponent(path)).then(resp => {
-        var html=resp.data.text;
+      axios.get(this.server + "/files/"+encodeURIComponent(path)).then(resp => {
+        // var html=resp.data.text;
+        var html=resp.data;
         html = this.replaceLink(html);
         this.text = html;
       });
@@ -144,13 +145,29 @@ export default {
       console.log(e);
     },
     replaceLink(html){
+      // replace image ![[]] to ![]() 
+      var reg_link = /\!\[\[(.+?)\]\]/g;
+      var result = html.match(reg_link)
+      console.log("result:",result)
+      for (let key in result) {
+          var element = result[key];
+          const title = element.replace(/\!\[\[/g, '').replace(/\]\]/g, '')
+          const link = title.replace(/\s+/g,"%20")
+          const href = `![image](/files/${link})`
+          console.log("key:",element)
+          console.log("link:",link)
+          console.log("href:",href)
+          html = html.replace(element, href)
+      }
+    
+      // replace link [[]] to []()
       var reg_link = /\[\[(.+?)\]\]/g;
       var result = html.match(reg_link)
       console.log("result:",result)
       for (let key in result) {
           var element = result[key];
           const title = element.replace(/\[\[/g, '').replace(/\]\]/g, '')
-          const link = title.replace(/\s+/g,"+")
+          const link = title.replace(/\s+/g,"%20")
           const href = `[${title}](/#/?path=${link}.md)`
           console.log("key:",element)
           console.log("link:",link)
@@ -158,6 +175,7 @@ export default {
           html = html.replace(element, href)
       }
 
+      // replace markdown images to local
       var reg_image=/!\[(.+?)\]\((.+?)\)/g
       var result = html.match(reg_image)
       for (let key in result) {
@@ -169,6 +187,7 @@ export default {
           html = html.replace(element,image)
       }
 
+      // fix markdown image path error
       var reg_image=/!\[]\((.+?)\)/g
       var result = html.match(reg_image)
       for (let key in result) {

@@ -37,6 +37,7 @@ function GetFileList(current) {
 }
 
 function replaceStatic(text) {
+    return text;
     var t = text.match(/!\[\[(.+?)\]\]/g);
     if (t) {
         t.forEach((r) => {
