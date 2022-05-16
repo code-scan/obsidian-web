@@ -14,7 +14,7 @@
     <div class="body">
       <el-row>
         <!-- v-bind:style="{ width: detailWidth + 'px' }" -->
-        <el-col id="menu" class="left"  :span="5"
+        <el-col id="menu"   class="left"  :span="menu_span"
           >
           <div class="bg-purple">
             <el-input
@@ -34,7 +34,7 @@
             </el-tree>
           </div></el-col
         >
-        <el-col id="content" class="right" :span="19"
+        <el-col id="content" :style="{ 'padding-left' : content_left_padding+'px'}" class="right" :span="content_span"
           ><div class=" bg-purple-light">
             <mavon-editor
               :toolbars="markdownOption"
@@ -69,10 +69,13 @@ export default {
       title: "Obsidian Web",
       keyword: "",
       detailWidth:'300',
+      menu_span:5,
+      content_span:19,
+      content_left_padding:20,
     };
   },
   mounted() {
-
+    this.resize();
     var index='index.md'
     if(this.$route.query.path){
       index = this.$route.query.path;
@@ -81,15 +84,13 @@ export default {
     axios.get(this.server + "/list").then(resp => {
       console.log("send requests");
       this.filelist = [];
-      this.filelist.push({
-        label: "首页",
-        name: "首页",
-        fullpath: index,
-        type: "file"
-      });
       this.filelist = this.filelist.concat(resp.data.nodes);
       this.fulllist = this.filelist;
       this.title = resp.data.title;
+      if(index){
+        const filename=index.split('/');
+        this.title=filename[filename.length-1]
+      }
     });
     this.readFile(index)
     // this.dragControllerDiv()
@@ -115,6 +116,13 @@ export default {
    }
   },
   methods: {
+    resize(){
+      if(screen.width<screen.height){
+        this.menu_span=0;
+        this.content_span=24
+        this.content_left_padding=0
+      } 
+    },
     readFile(path){
       axios.get(this.server + "/files/"+encodeURIComponent(path)).then(resp => {
         // var html=resp.data.text;
@@ -268,7 +276,6 @@ export default {
   max-height: 730px;
   height: 730px;
   overflow: hidden;
-  padding-left: 20px;
   padding-right: 20px;
   scrollbar-width: none;
   
