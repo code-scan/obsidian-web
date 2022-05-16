@@ -25,9 +25,9 @@
             </el-input>
             <el-tree :data="filelist" @node-click="handleNodeClick">
               <span slot-scope="{ node, data }">
-                <i v-if="data.type == 'dir'" class="el-icon-notebook-2" />
-                <i v-else class="el-icon-tickets" />
-                <span style="margin-left:5px;" :title="data.name">{{
+                <!-- <i v-if="data.type == 'dir'"  class="el-icon-notebook-2" />
+                <i v-else class="el-icon-tickets" /> -->
+                <span :class="'nav-'+data.type+'-title-content'" style="margin-left:5px;"  :data-path="data.name" :title="data.name">{{
                   data.name
                 }}</span>
               </span>
@@ -230,7 +230,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-row {
   margin-bottom: 20px;
   &:last-child {
@@ -295,4 +295,77 @@ export default {
   padding-left: 10px;
   padding-right: 20px;
 }
+
+
+
+
+
+.nav-file-title-content::before {
+    content: '🧻 ';
+}
+
+.nav-dir-title-content::before {
+    content: '🗳️ ';
+}
+
+span[data-path$="B_每日笔记"]::before {
+    content: "📆 ";
+}
+
+span[data-path$="模板文件"]::before {
+    content: "🗃️ ";
+}
+
+span[data-path$="安全"]::before {
+    content: "👨‍🏭 ";
+}
+
+span[data-path$="F_区块链与安全"]::before {
+    content: "⛓️ ";
+}
+
+span[data-path$="图片存储"]::before {
+    content: "🖼️ ";
+}
+
+span[data-path*="attachments"]::before {
+    content: "🖼️ ";
+}
+
+span[data-path$="开源书籍"]::before {
+    content: "📖 ";
+}
+
+span[data-path$="文章感悟"]::before {
+    content: "📰 ";
+}
+
+span[data-path$="效率工具"]::before {
+    content: "🧰 ";
+}
+
+span[data-path*="工具"]::before {
+    content: "🧰 ";
+}
+
+span[data-path$="编程运维"]::before {
+    content: "⌨️ ";
+}
+
+span[data-path$="B站视频"]::before {
+    content: "📹 ";
+}
+
+span[data-path$="创业与工作"]::before {
+    content: "👨‍💼 ";
+}
+
+span[data-path*="微信读书"]::before {
+    content: "📘 ";
+}
+
+span[data-path*="微信读书/"]::before {
+    content: "🔖 ";
+}
+
 </style>
