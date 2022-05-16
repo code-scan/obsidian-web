@@ -35,7 +35,7 @@ go build web.go
 
 ### windows
 
-下载[release](/releases)中的windows版本,然后在下载 [bin/run.bat](/bin/run.bat) 放到下载程序的同级目录
+下载[release](https://github.com/code-scan/obsidian-web/releases)中的windows版本,然后在下载 [bin/run.bat](/bin/run.bat) 放到下载程序的同级目录
 
 右键run.bat使用编辑器打开,修改里面的内容
 
