@@ -161,9 +161,13 @@ export default {
           var element = result[key];
           const title = element.replace(/\!\[\[/g, '').replace(/\]\]/g, '')
           const link = title.replace(/\s+/g,"%20")
-          const href = `![image](/files/${link})`
+          var href = `![image](/files/${link})`
+          // 判断是不是远程图片
+          if(link.indexOf('http')===0){
+            href = `![image](${link})`
+          }
           console.log("key:",element)
-          console.log("link:",link)
+          console.log("link:",link,link.indexOf('http'))
           console.log("href:",href)
           html = html.replace(element, href)
       }
@@ -188,6 +192,9 @@ export default {
       var result = html.match(reg_image)
       for (let key in result) {
           var element = result[key];
+          if(element.indexOf('http://')!=-1 || element.indexOf('https://')!=-1){
+            continue
+          }
           if(element.indexOf('files') > -1){
             continue;
           }
@@ -202,6 +209,9 @@ export default {
           var element = result[key];
           if(element.indexOf('files') > -1){
             continue;
+          }
+          if(element.indexOf('http://')!=-1 || element.indexOf('https://')!=-1){
+            continue
           }
           const image = element.replace('](', '](/files/')
           html = html.replace(element,image)
