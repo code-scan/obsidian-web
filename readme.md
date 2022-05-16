@@ -7,40 +7,23 @@
 Obsidian是纯靠目录结构进行笔记的存储与分类的，所以实现也比较简单，一个tree+markdown editor就可以解决了
 
 
-## golang server (推荐)
+
+## 编译
 
 ```bash
 cd frontend
 npm run go
 cd ../goServer/
-go run web.go -p obsidian_full_path
 
 go build web.go 
 
-./web.exe -p obsidian_full_path
+```
+
+
+## 使用
+
+```
+./web -o obsidian_full_path -p web_port
 ```
 
 编译好的可以在[bin](/bin/)目录下载
-
-
-## nodejs server (不推荐)
-
-
-## 配置
-编辑 **/Server/index.js**
-
-```js
-// 端口
-const port = 3000;
-...
-// 笔记路径
-const obsdianPath =
-  "/Users/c/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/人生漫漫/人生漫漫";
-
-```
-
-## 运行
-```bash
-cd Server
-npm run serve
-```
