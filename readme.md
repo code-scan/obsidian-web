@@ -52,3 +52,5 @@ web_windows_amd64.exe -p 8000 -o "d:\obsidian\save\path"
 开始菜单->输入cmd.exe->回车运行->在输入`ipconfig`回车
 
 查看自己内网ip,最后通过ip:8000,即可访问.如果前面修改了8000为其他端口则这里改成之前修改的即可.
+
+> 至于如何外网访问,建议可以使用ngrok进行映射,ngrok的具体使用方法可以自行搜索.
